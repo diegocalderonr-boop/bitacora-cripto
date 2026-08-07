@@ -83,6 +83,7 @@ header nav {
 .nav-links a {
   font-size: 0.9rem;
   color: var(--color-text-secondary);
+  white-space: nowrap;
 }
 
 .nav-links a:hover {
