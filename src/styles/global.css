@@ -52,6 +52,11 @@ header nav {
   align-items: center;
 }
 
+.site-brand {
+  display: flex;
+  flex-direction: column;
+}
+
 .site-title {
   font-size: 1.1rem;
   font-weight: 700;
@@ -61,6 +66,12 @@ header nav {
 .site-title:hover {
   color: var(--color-accent);
   text-decoration: none;
+}
+
+.site-subtitle {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  line-height: 1.3;
 }
 
 .nav-links {
