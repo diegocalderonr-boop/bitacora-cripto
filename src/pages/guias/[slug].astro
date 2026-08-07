@@ -1,0 +1,29 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const guias = await getCollection('guias');
+  return guias.map((guia) => ({
+    params: { slug: guia.id },
+    props: { guia },
+  }));
+}
+
+const { guia } = Astro.props;
+const { Content } = await render(guia);
+---
+
+<Base title={`${guia.data.titulo} — Bitácora Cripto`}>
+  <a href="/" class="back-link">&larr; Volver a guías</a>
+  <article>
+    <h1>{guia.data.titulo}</h1>
+    <div class="guia-meta" style="margin-bottom: 2rem;">
+      <span class="tag">{guia.data.categoria}</span>
+      <time>{guia.data.fecha}</time>
+    </div>
+    <div class="prose">
+      <Content />
+    </div>
+  </article>
+</Base>

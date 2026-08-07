@@ -1,0 +1,59 @@
+---
+import Base from '../layouts/Base.astro';
+import { getCollection } from 'astro:content';
+
+const guias = (await getCollection('guias')).sort(
+  (a, b) => new Date(b.data.fecha).getTime() - new Date(a.data.fecha).getTime()
+);
+
+const categorias = ['Arbitraje triangular', 'Arbitraje P2P', 'Arbitraje cash-and-carry'];
+---
+
+<Base title="Bitácora Cripto — Guías de arbitraje">
+  <h1>Guías de arbitraje</h1>
+  <p class="subtitle">Notas personales sobre mecanismos de arbitraje en cripto.</p>
+
+  <div class="filters">
+    <button class="filter-btn active" data-category="todas">Todas</button>
+    {categorias.map((cat) => (
+      <button class="filter-btn" data-category={cat}>{cat}</button>
+    ))}
+  </div>
+
+  <div class="guia-list">
+    {guias.map((guia) => (
+      <article class="guia-card" data-category={guia.data.categoria}>
+        <h2><a href={`/guias/${guia.id}`}>{guia.data.titulo}</a></h2>
+        <div class="guia-meta">
+          <span class="tag">{guia.data.categoria}</span>
+          <time>{guia.data.fecha}</time>
+        </div>
+      </article>
+    ))}
+  </div>
+
+  <div class="empty-state" id="empty" style="display:none;">
+    No hay guías en esta categoría todavía.
+  </div>
+</Base>
+
+<script>
+  const buttons = document.querySelectorAll('.filter-btn');
+  const cards = document.querySelectorAll('.guia-card');
+  const empty = document.getElementById('empty');
+
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      buttons.forEach((b) => b.classList.remove('active'));
+      btn.classList.add('active');
+      const cat = btn.getAttribute('data-category');
+      let visible = 0;
+      cards.forEach((card) => {
+        const show = cat === 'todas' || card.getAttribute('data-category') === cat;
+        (card as HTMLElement).style.display = show ? '' : 'none';
+        if (show) visible++;
+      });
+      if (empty) empty.style.display = visible === 0 ? '' : 'none';
+    });
+  });
+</script>
